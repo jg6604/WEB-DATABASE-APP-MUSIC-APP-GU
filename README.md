@@ -33,6 +33,9 @@ Final app see the report for details, not providing the main.py code for backend
 <img width="568" alt="Screenshot 2023-12-01 at 10 43 12 PM" src="https://github.com/jg6604/WEB-DATABASE-MUSIC-APP-GU/assets/90733954/defc4ddc-81d0-43de-b32b-d536937e5f62">
 
 
+<img width="617" alt="Screenshot 2023-12-01 at 10 12 31 PM" src="https://github.com/jg6604/WEB-DATABASE-MUSIC-APP-GU/assets/90733954/b17b3601-51a5-4027-afc5-c9b01dcf9d4f">
+
+
 
 
 
