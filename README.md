@@ -7,7 +7,6 @@ python/flask, html, relational database, RDBMS
 
 Designed a relational database for storing data and developed a Web Application with backend Python/Flask and frontend HTML for building a social network for music fans. Users could use this app to register and login, manage friend requests, share reviews and recommendations, see artists’ newly released songs, search, review and rate music, and also create playlists.
 
-Final app see the report for details, not providing the main.py code for backend running in this git(large file), feel free to reach me out for this part reference.
 
 
 <img width="517" alt="Screenshot 2023-12-01 at 10 08 43 PM" src="https://github.com/jg6604/WEB-DATABASE-MUSIC-APP-GU/assets/90733954/5284d5fe-6124-452f-8cb0-0f010c72c2da">
