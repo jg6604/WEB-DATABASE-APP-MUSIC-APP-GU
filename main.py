@@ -1,11 +1,9 @@
 #Import Flask Library
 import flask
 from flask import Flask, render_template, request, session, url_for, redirect, flash
-import pymysql.cursors
 import os
 #import config
 from app import app
-from datetime import datetime
 #from flask import Flask, flash, request, redirect, render_template
 from werkzeug.utils import secure_filename
 import hashlib
@@ -22,7 +20,7 @@ conn = pymysql.connect(host='localhost',
                        port = 8889,
                        user='root',
                        password='root',
-                       db='try',
+                       db='...',
                        charset='utf8mb4',
                        cursorclass=pymysql.cursors.DictCursor)
 
@@ -51,7 +49,7 @@ def loginAuth():
     password = request.form['password']
 
     #add hash
-    input_pwd_hash = hashlib.sha256(password.encode('utf-8')).hexdigest()
+   
 
     #cursor
     cursor = conn.cursor()
@@ -64,14 +62,14 @@ def loginAuth():
     if(data==None):
         return render_template('index.html')
     db_password = data['pwd']
-    db_pwd_hash = hashlib.sha256(db_password.encode('utf-8')).hexdigest()
+   
     error = None
 
     #check
     if(input_pwd_hash==db_pwd_hash):
         session['name'] = username
         #update login status
-        loginStats = datetime.utcnow()
+
         formatted_date = loginStats.strftime('%Y-%m-%d')
         loginDateSql = "SELECT lastlogin FROM user WHERE username=%s"
         query = "UPDATE user SET lastlogin=%s WHERE username = %s"
@@ -137,15 +135,15 @@ def home():
 
         query1 = '''SELECT reviewSong.username,fname,lname, songID, reviewText,reviewDate
             FROM (user AS us JOIN follows on follows.follows=us.username) JOIN reviewSong ON follows.follows=reviewSong.username
-            WHERE follows.follower=%s and reviewDate>=%s
+            WHERE follows.follower=%s
             UNION
             SELECT reviewSong.username, fname,lname, songID, reviewText,reviewDate
             FROM (user AS us JOIN friend on friend.user1=us.username) JOIN reviewSong ON friend.user1=reviewSong.username
-            WHERE (friend.user2=%s) AND acceptStatus='Accepted' AND reviewDate>=%s
+            WHERE (friend.user2=%s) AND acceptStatus='Accepted'
             UNION
             SELECT reviewSong.username, fname,lname,songID, reviewText,reviewDate
             FROM (user AS us JOIN friend on friend.user2=us.username) JOIN reviewSong ON friend.user2=reviewSong.username
-            WHERE (friend.user1=%s) AND acceptStatus='Accepted' AND reviewDate>=%s  
+            WHERE (friend.user1=%s) AND acceptStatus='Accepted' 
             ORDER BY reviewDate DESC
             '''
 
@@ -197,8 +195,7 @@ def musicSearchAction():
 
     query = '''SELECT songID,title,fname, lname,genre,releaseDate,songURL,aves
                 FROM song NATURAL JOIN aveRate NATURAL JOIN songGenre NATURAL JOIN artist NATURAL JOIN artistPerformsSong
-                WHERE 1=1 '''
-    m = []  # for store
+          '''
 
     data = cursor.fetchall()
 
@@ -327,8 +324,8 @@ def rateSongAction():
 
         #if there exists, update
         if(rates):
-            updateSql = "UPDATE rateSong SET stars=%s WHERE username=%s AND songID=%s"
-            updateTime = "UPDATE rateSong SET ratingDate=%s WHERE username=%s AND songID=%s"
+            updateSql = "UPDATE rateSong stars=%s WHERE username=%s AND songID=%s"
+            updateTime = "UPDATE rateSong ratingDate=%s WHERE username=%s AND songID=%s"
             cursor.execute(updateSql,(stars,username,songID))
             conn.commit()
             cursor.execute(updateTime, (date, username, songID))
@@ -491,9 +488,6 @@ def unfriend():
     cursor.execute(query,(sender,name,name,sender))
     data = cursor.fetchone()
     if(data):
-        delete1 = '''DELETE FROM friend WHERE user1=%s AND user2=%s AND acceptStatus='Accepted'
-        '''
-        delete2 = "DELETE FROM friend WHERE user1=%s AND user2=%s AND acceptStatus='Accepted'"
 
 
         cursor.execute(delete1,(name,sender))
@@ -622,10 +616,7 @@ def addPlaylistAction():
     if(data):
         error = 'already in this playlist'
         print('already in')
-        query1 = '''SELECT * FROM playlist WHERE username=%s'''
-        cursor.execute(query1, username)
-        data = cursor.fetchall()
-        cursor.close()
+
         return render_template('addPlaylist.html',playlist=data,error=error)
     else:
         ins = '''INSERT INTO songInList values(%s,%s,%s)'''
