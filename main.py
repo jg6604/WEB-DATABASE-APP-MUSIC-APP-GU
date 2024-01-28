@@ -71,8 +71,7 @@ def loginAuth():
         #update login status
 
         formatted_date = loginStats.strftime('%Y-%m-%d')
-        loginDateSql = "SELECT lastlogin FROM user WHERE username=%s"
-        query = "UPDATE user SET lastlogin=%s WHERE username = %s"
+    
         cursor = conn.cursor()
         cursor.execute(loginDateSql,(username))
         lastLoginTime = cursor.fetchone()
@@ -125,7 +124,7 @@ def home():
         return render_template('index.html')
     else:
         username = session['name']
-        session['stringFormat'] = '%a, %d %b %Y %H:%M:%S %Z'
+    
         lastlogin = datetime.strptime(lastlogin,session['stringFormat'])
         lastlogin = lastlogin.date()
         cursor = conn.cursor()
@@ -133,18 +132,8 @@ def home():
         cursor.execute(query, (username))
         data = cursor.fetchone()
 
-        query1 = '''SELECT reviewSong.username,fname,lname, songID, reviewText,reviewDate
-            FROM (user AS us JOIN follows on follows.follows=us.username) JOIN reviewSong ON follows.follows=reviewSong.username
-            WHERE follows.follower=%s
-            UNION
-            SELECT reviewSong.username, fname,lname, songID, reviewText,reviewDate
-            FROM (user AS us JOIN friend on friend.user1=us.username) JOIN reviewSong ON friend.user1=reviewSong.username
-            WHERE (friend.user2=%s) AND acceptStatus='Accepted'
-            UNION
-            SELECT reviewSong.username, fname,lname,songID, reviewText,reviewDate
-            FROM (user AS us JOIN friend on friend.user2=us.username) JOIN reviewSong ON friend.user2=reviewSong.username
-            WHERE (friend.user1=%s) AND acceptStatus='Accepted' 
-            ORDER BY reviewDate DESC
+        
+        
             '''
 
 
@@ -171,41 +160,7 @@ def musicSearch():
 
 #Define music search action
 @app.route('/musicSearchAction',methods=['GET','POST'])
-def musicSearchAction():
-    #fetch music name
-    songID = request.form['songID']
-    songTitle = request.form['songTitle']
-    genre = request.form['genre']
-    fname = request.form['artistFname']
-    lname = request.form['artistLname']
-    rating = request.form['aboveRating']
-    # cursor used to send queries
-    dict = {'songID':songID, 'songTitle':songTitle, 'genre':genre, 'fname':fname, 'lname':lname, 'rating':rating}
 
-    cursor = conn.cursor()
-
-    # drop view
-    dropSql = "DROP VIEW IF EXISTS aveRate"
-    cursor.execute(dropSql)
-
-    VIEWsql = ''' CREATE VIEW aveRate AS (SELECT songID,AVG(stars) as aves
-                FROM song NATURAL JOIN rateSong 
-                GROUP BY songID)'''
-    cursor.execute(VIEWsql)
-
-    query = '''SELECT songID,title,fname, lname,genre,releaseDate,songURL,aves
-                FROM song NATURAL JOIN aveRate NATURAL JOIN songGenre NATURAL JOIN artist NATURAL JOIN artistPerformsSong
-          '''
-
-    data = cursor.fetchall()
-
-    cursor.close()
-    error = None
-    if(data):
-        return render_template("searchResult.html",results=data)
-    else:
-        error='Invalid, no matching results'
-        return render_template("musicSearch.html",error=error)
 
 
 #Define song
@@ -227,9 +182,7 @@ def song():
                 FROM song NATURAL JOIN rateSong 
                 GROUP BY songID);
         '''
-    query = '''SELECT songID,title,fname, lname,genre,releaseDate,songURL,aves,albumID
-                FROM song NATURAL JOIN aveRate NATURAL JOIN songGenre NATURAL JOIN artist NATURAL JOIN artistPerformsSong NATURAL JOIN songInAlbum
-                WHERE songID=%s'''
+
     cursor.execute(VIEW)
     cursor.execute(query,(songID))
     #stores the results in a variable
@@ -260,13 +213,9 @@ def showSong():
     cursor.execute(dropSql)
 
     #executes query
-    VIEW = ''' CREATE VIEW aveRate AS (SELECT songID,AVG(stars) as aves
-                FROM song NATURAL JOIN rateSong 
-                GROUP BY songID);
+
         '''
-    query = '''SELECT songID,title,fname, lname,genre,releaseDate,songURL,aves,albumID
-                FROM song NATURAL JOIN aveRate NATURAL JOIN songGenre NATURAL JOIN artist NATURAL JOIN artistPerformsSong NATURAL JOIN songInAlbum
-                WHERE songID=%s'''
+
     cursor.execute(VIEW)
     cursor.execute(query,(songID))
     #stores the results in a variable
@@ -292,7 +241,7 @@ def rateSong():
         # cursor used to send queries
         cursor = conn.cursor()
         # executes query
-        query = 'SELECT username,songID,stars,ratingDate FROM user NATURAL JOIN rateSong WHERE songID=%s ORDER BY ratingDate DESC'
+     
         cursor.execute(query, (songID))
         # stores the results in a variable
         rates = cursor.fetchall()
@@ -305,40 +254,7 @@ def rateSong():
 
 #Define rate song action
 @app.route('/rateSongAction',methods=["GET","POST"])
-def rateSongAction():
-    if(session['name']!=None):
-        username = session['name']
-        songID = session['songID']
-        stars = request.form['rate']
-        rateStr = float(stars)
-        if rateStr<0 or rateStr>5:
-            return redirect(url_for('home'))
-        cursor = conn.cursor()
-        date = datetime.utcnow().strftime('%Y-%m-%d')
 
-        # executes query
-        query = 'SELECT * FROM rateSong WHERE username=%s AND songID=%s'
-        cursor.execute(query, (username, songID))
-        # stores the results in a variable
-        rates = cursor.fetchall()
-
-        #if there exists, update
-        if(rates):
-            updateSql = "UPDATE rateSong stars=%s WHERE username=%s AND songID=%s"
-            updateTime = "UPDATE rateSong ratingDate=%s WHERE username=%s AND songID=%s"
-            cursor.execute(updateSql,(stars,username,songID))
-            conn.commit()
-            cursor.execute(updateTime, (date, username, songID))
-            cursor.close()
-            return redirect(url_for('showSong'))
-        else:
-            ins = 'INSERT INTO rateSong VALUES(%s, %s, %s, %s)'
-            cursor.execute(ins, (username, songID, stars, date))
-            conn.commit()
-            cursor.close()
-            return redirect(url_for('showSong'))
-    else:
-        return render_template('index.html')
 
 
 
@@ -352,7 +268,7 @@ def reviewSong():
         # cursor used to send queries
         cursor = conn.cursor()
         # executes query
-        query = 'SELECT username,songID,reviewText,reviewDate FROM user NATURAL JOIN reviewSong WHERE songID=%s ORDER BY reviewDate DESC'
+     
         cursor.execute(query, (songID))
         # stores the results in a variable
         reviews = cursor.fetchall()
@@ -380,19 +296,7 @@ def reviewSongAction():
         # stores the results in a variable
         data = cursor.fetchone()
 
-        if(data):
-            update = "UPDATE reviewSong SET reviewText=%s,reviewDate=%s WHERE username=%s AND songID=%s"
-            cursor.execute(update,(reviews,date,username,songID))
-            conn.commit()
-            cursor.close()
-            return redirect(url_for('showSong'))
-        else:
 
-            ins = 'INSERT INTO reviewSong VALUES(%s, %s, %s, %s)'
-            cursor.execute(ins, (username, songID, reviews, date))
-            conn.commit()
-            cursor.close()
-            return redirect(url_for('showSong'))
     else:
         return render_template('index.html')
 
@@ -423,7 +327,7 @@ def accept():
     checkone = cursor.fetchone()
 
     if(checkone):
-        query = 'UPDATE friend SET acceptStatus="Accepted" WHERE user1=%s AND user2=%s'  # user1 is the sender, user2 is the receiver
+         # user1 is the sender, user2 is the receiver
         cursor.execute(query, (sender, user))
         conn.commit()
         cursor.close()
@@ -446,7 +350,6 @@ def reject():
     checkone = cursor.fetchone()
 
     if (checkone):
-        query = 'UPDATE friend SET acceptStatus="Not accepted" WHERE user1=%s AND user2=%s'
         cursor.execute(query, (sender, user))
         conn.commit()
         cursor.close()
@@ -458,23 +361,7 @@ def reject():
 
 #Define send requests
 @app.route('/friendRequest',methods=['POST'])
-def friendRequest():
-    sender = session['name']
-    receiver = request.form['requestUserName']
-    cursor = conn.cursor()
-    query = '(SELECT * FROM friend WHERE user1="%s" AND user2="%s") UNION (SELECT * FROM friend WHERE user1="%s" AND user2="%s")'  # consider both cases that user is in user1 or in user2
-    cursor.execute(query,(sender,receiver,receiver,sender))
-    data = cursor.fetchall()
-    if(data==()):
-        return redirect(url_for('friends'))
-    else:
-        ins = "INSERT INTO friend VALUES(%s,%s,'Pending',%s,%s,%s)"
-        sendTime = datetime.utcnow()
-        formatted_date = sendTime.strftime('%Y-%m-%d %H:%M:%S')
-        cursor.execute(ins,(sender,receiver,sender,formatted_date,formatted_date))
-        conn.commit()
-        cursor.close()
-        return redirect(url_for('friends'))
+
 
 #Define unfriend
 @app.route('/unfriend',methods=["POST"])
@@ -509,7 +396,7 @@ def unfriend():
 def addFollow():
     user = session['name']
     person = request.form['name']
-    sendTime = datetime.utcnow().strftime('%Y-%m-%d')
+
 
     cursor = conn.cursor()
     check = 'SELECT * FROM user WHERE username=%s'
@@ -604,24 +491,7 @@ def addPlaylist():
 
 #Define addPlaylistAction
 @app.route('/addPlaylistAction',methods=['GET','POST'])
-def addPlaylistAction():
-    username = session['name']
-    songID = session['songID']
-    title = request.form['thisList']
 
-    cursor = conn.cursor()
-    query1 = '''SELECT * FROM songInList WHERE songID=%s AND username=%s AND title=%s'''
-    cursor.execute(query1, (songID,username,title))
-    data = cursor.fetchall()
-    if(data):
-        error = 'already in this playlist'
-        print('already in')
-
-        return render_template('addPlaylist.html',playlist=data,error=error)
-    else:
-        ins = '''INSERT INTO songInList values(%s,%s,%s)'''
-        cursor.execute(ins,(songID,title,username))
-        return redirect(url_for('showSong'))
 
 #Define listSong
 @app.route('/listSong',methods=['GET','POST'])
@@ -633,7 +503,7 @@ def listSong():
     query1 = '''SELECT song.songID,song.title FROM songInList JOIN song ON (song.songID=songInList.songID AND username=%s) WHERE songInList.title=%s'''
     cursor.execute(query1, (username, title))
     data = cursor.fetchall()
-    return render_template('listSong.html',title=title,list=data)
+    return render_template('listSong.html')
 
 
 @app.route('/logout')
