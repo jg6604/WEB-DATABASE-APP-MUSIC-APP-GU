@@ -30,7 +30,7 @@ Building a new social network for music fans for a startup. The main idea is tha
 
 <img width="595" alt="Screenshot 2024-01-28 at 11 14 53 AM" src="https://github.com/jg6604/WEB-DATABASE-MUSIC-APP-GU/assets/90733954/9ec979ab-f725-4faa-9f69-29385e87fa80">
 
-### createPlayist:
+### createPlaylist:
 
 <img width="595" alt="Screenshot 2024-01-28 at 11 15 09 AM" src="https://github.com/jg6604/WEB-DATABASE-MUSIC-APP-GU/assets/90733954/0814a842-0990-43f3-9591-d883c4317aab">
 
