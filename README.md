@@ -38,19 +38,26 @@ friends:
 
 <img width="595" alt="Screenshot 2024-01-28 at 11 15 26 AM" src="https://github.com/jg6604/WEB-DATABASE-MUSIC-APP-GU/assets/90733954/9012dea5-e01c-41df-bc5e-d4dda163fb6f">
 
+
 <img width="595" alt="Screenshot 2024-01-28 at 11 15 42 AM" src="https://github.com/jg6604/WEB-DATABASE-MUSIC-APP-GU/assets/90733954/cc82a67e-0398-4b36-bd1e-2a7c6d008229">
+
 
 <img width="595" alt="Screenshot 2024-01-28 at 11 15 56 AM" src="https://github.com/jg6604/WEB-DATABASE-MUSIC-APP-GU/assets/90733954/9cabf0b1-aadc-404c-a11c-836373757f98">
 
+
 <img width="595" alt="Screenshot 2024-01-28 at 11 16 11 AM" src="https://github.com/jg6604/WEB-DATABASE-MUSIC-APP-GU/assets/90733954/83a0d910-a64e-426a-92e8-60a1dc832f2a">
+
 
 follow:
 
 <img width="595" alt="Screenshot 2024-01-28 at 11 16 24 AM" src="https://github.com/jg6604/WEB-DATABASE-MUSIC-APP-GU/assets/90733954/dadde74d-c26d-458f-837a-2fb596649faa">
 
+
 <img width="595" alt="Screenshot 2024-01-28 at 11 16 38 AM" src="https://github.com/jg6604/WEB-DATABASE-MUSIC-APP-GU/assets/90733954/18fae64f-c755-4e42-b961-3a5d8dff8cdb">
 
+
 <img width="595" alt="Screenshot 2024-01-28 at 11 16 49 AM" src="https://github.com/jg6604/WEB-DATABASE-MUSIC-APP-GU/assets/90733954/072415a2-bffb-495e-8fef-cff1d5ae347f">
+
 
 musicSearch:
 
@@ -65,7 +72,9 @@ song:
 rateSong:
 
 <img width="595" alt="Screenshot 2024-01-28 at 11 17 38 AM" src="https://github.com/jg6604/WEB-DATABASE-MUSIC-APP-GU/assets/90733954/ab7fc65e-035e-4847-96ce-c094fade73d8">
+
 addPlaylist:
+
 <img width="595" alt="Screenshot 2024-01-28 at 11 17 49 AM" src="https://github.com/jg6604/WEB-DATABASE-MUSIC-APP-GU/assets/90733954/a6d44b4a-c72f-42f7-b3e8-1084a739708c">
 
 playlist:
