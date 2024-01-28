@@ -69,7 +69,8 @@ Building a new social network for music fans for a startup. The main idea is tha
 song:
 
 <img width="595" alt="Screenshot 2024-01-28 at 11 17 28 AM" src="https://github.com/jg6604/WEB-DATABASE-MUSIC-APP-GU/assets/90733954/56c3cabe-d3ce-4aa9-8733-db1035161e1a">
-rateSong:
+
+### rateSong:
 
 <img width="595" alt="Screenshot 2024-01-28 at 11 17 38 AM" src="https://github.com/jg6604/WEB-DATABASE-MUSIC-APP-GU/assets/90733954/ab7fc65e-035e-4847-96ce-c094fade73d8">
 
