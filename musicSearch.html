@@ -8,12 +8,10 @@
 	<input type="text" name = "genre" placeholder="music genre" /> </br>
 	<input type="text" name = "artistFname" placeholder="Artist First Name" /> </br>
 	<input type="text" name = "artistLname" placeholder="Artist Last Name" /> </br>
-	<input type="number" name = "aboveRating" placeholder="Rating Above" step="0.1" min="0" max="5" /> </br>
+
 
 	<input type="submit" value = Search />
-	{% if error %}
-		<p class="error"><strong>Error:</strong> {{error}}</p>
-	{% endif %}
+
 </form>
 
 <a href="/home">Go back</a>
